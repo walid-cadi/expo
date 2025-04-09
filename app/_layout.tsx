@@ -4,6 +4,7 @@ import { ClerkLoaded, ClerkProvider, useAuth } from '@clerk/clerk-expo';
 import * as SecureStore from "expo-secure-store";
 import { useRoute } from "@react-navigation/native";
 import { useEffect } from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function RootLayout() {
   // if (!loaded) {
@@ -43,13 +44,11 @@ export default function RootLayout() {
   //   return <Slot/>;
   // }
   return (
-  <ClerkProvider tokenCache={tokenCache} publishableKey="pk_test_c3RpbGwtbWFtbW90aC05NC5jbGVyay5hY2NvdW50cy5kZXYk">
-    <ClerkLoaded>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <Stack >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack>
-      </ClerkLoaded>
-    </ClerkProvider>
+      </GestureHandlerRootView>
   )
 }

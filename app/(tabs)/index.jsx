@@ -68,7 +68,7 @@ export default function Index() {
       ) : (
         <View className="flex items-center justify-start gap-y-2">
           <Button label="choose image"  theme="primary" onPress={pickImageAsync} />
-          <Button label="Use this photo" onPress={() => setShowAppOptions(true)} />
+          <Button label="Use Emoji" onPress={() => setShowAppOptions(true)} />
         </View>
       )}
       <EmojiPicker isVisible={isModalVisible} onClose={onModalClose}>
