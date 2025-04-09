@@ -5,12 +5,15 @@ import { Image } from "expo-image";
 import ImageViewer from "@/components/imageViewer";
 import Button from "@/components/button";
 import * as ImagePicker from 'expo-image-picker';
-import { useState } from "react";
+import { useRef, useState } from "react";
 import IconButton from '@/components/IconButton';
 import CircleButton from '@/components/CircleButton';
 import EmojiPicker from "@/components/EmojiPicker";
 import EmojiList from "@/components/EmojiList";
 import EmojiSticker from "@/components/EmojiSticker";
+import * as MediaLibrary from 'expo-media-library';
+import { captureRef } from 'react-native-view-shot';
+
 
 const PlaceHolderImage = require("../../assets/images/background-image.png");
 
@@ -48,15 +51,37 @@ export default function Index() {
     setIsModalVisible(false);
   };
 
+  const [status, requestPermission] = MediaLibrary.usePermissions();
+  const imageRef = useRef(null);
+
+  if (status === null) {
+    requestPermission();
+  }
+
   const onSaveImageAsync = async () => {
-    // we will implement this later
+    try {
+      const localUri = await captureRef(imageRef, {
+        height: 440,
+        quality: 1,
+      });
+
+      await MediaLibrary.saveToLibraryAsync(localUri);
+      if (localUri) {
+        alert('Saved!');
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
     <View className="h-full bg-[#25292e] flex items-center justify-start gap-y-2">
       <Text className="text-3xl text-white">this is image</Text>
-      <ImageViewer imgSource={!selsctImage ? PlaceHolderImage : selsctImage  } />
-      {pickedEmoji && <EmojiSticker imageSize={60} stickerSource={pickedEmoji} />}
+      <View ref={imageRef} collapsable={false} >
+        <ImageViewer imgSource={!selsctImage ? PlaceHolderImage : selsctImage  } />
+        {pickedEmoji && <EmojiSticker imageSize={60} stickerSource={pickedEmoji} />}
+      </View>
+      
       {showAppOptions ? (
         <View style={styles.optionsContainer}>
         <View style={styles.optionsRow}>
